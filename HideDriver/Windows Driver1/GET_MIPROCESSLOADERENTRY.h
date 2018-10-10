@@ -4,7 +4,7 @@
 
 #include <ntddk.h>
 
-typedef NTSTATUS(__fastcall *MiProcessLoaderEntry)(PVOID pDriverSection, int bLoad);
+typedef NTSTATUS(__fastcall *MiProcessLoaderEntry)(PVOID pDriverSection, BOOLEAN bLoad);
 
 PVOID GetProcAddress(WCHAR *FuncName)
 {
