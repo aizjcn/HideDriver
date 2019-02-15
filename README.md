@@ -2,8 +2,4 @@
 - 用MiProcessLoaderEntry移除DriverObject->DriverSection（直接断链会遭遇PG）
 - 然后抹去Driver特征，有个问题，不能在DriverEntry中抹除驱动特征，IoRegisterDriverReinitialization用这个函数来在驱动加载完成之后去抹除信息（之前使用线程来搞，有点笨.....）
 
-- 16299会遭遇PG
-- 14393会遭遇PG
-- 10240会遭遇PG
-
-挂了连个小时，把SEHSupport注释掉没遭遇109
+- 挂了连个小时，把SEHSupport注释掉没遭遇109
