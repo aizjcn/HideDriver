@@ -13,12 +13,12 @@ PVOID GetProcAddress(WCHAR *FuncName)
 	return MmGetSystemRoutineAddress(&u_FuncName);
 }
 
-//ÔÚWindows 7µÄÏµÍ³ÏÂÈ¥ËÑË÷MiProcessLoaderEntryº¯Êı
+//åœ¨Windows 7çš„ç³»ç»Ÿä¸‹å»æœç´¢MiProcessLoaderEntryå‡½æ•°
 MiProcessLoaderEntry Get_MiProcessLoaderEntry_WIN_7()
 {
-	//Õâ¸öSearch_Code¾ÍÊÇMiProcessLoaderEntryº¯ÊıµÄ×îÇ°ÃæµÄ²Ù×÷Âë
-	//WIN7µÄËÑË÷ºÜÓĞÈ¤£¬MiProcessLoaderEntryÕâ¸öº¯Êı¾ÍÔÚEtwWriteStringº¯ÊıµÄÇ°Ãæ¼¸¸öº¯Êı
-	//ËùÒÔÖ±½ÓËÑË÷EtwWriteStringº¯ÊıÈ»ºóÏòÇ°ËÑË÷¼´¿É
+	//è¿™ä¸ªSearch_Codeå°±æ˜¯MiProcessLoaderEntryå‡½æ•°çš„æœ€å‰é¢çš„æ“ä½œç 
+	//WIN7çš„æœç´¢å¾ˆæœ‰è¶£ï¼ŒMiProcessLoaderEntryè¿™ä¸ªå‡½æ•°å°±åœ¨EtwWriteStringå‡½æ•°çš„å‰é¢å‡ ä¸ªå‡½æ•°
+	//æ‰€ä»¥ç›´æ¥æœç´¢EtwWriteStringå‡½æ•°ç„¶åå‘å‰æœç´¢å³å¯
 	CHAR Search_Code[] = "\x48\x89\x5C\x24\x08"			//mov     [rsp+arg_0], rbx
 						 "\x48\x89\x6C\x24\x18"			//mov     [rsp+arg_10], rbp
 						 "\x48\x89\x74\x24\x20"			//mov     [rsp+arg_18], rsi
@@ -45,7 +45,7 @@ MiProcessLoaderEntry Get_MiProcessLoaderEntry_WIN_7()
 	return NULL;
 }
 
-//ÔÚWindows 8µÄÏµÍ³ÏÂÈ¥ËÑË÷MiProcessLoaderEntryº¯Êı
+//åœ¨Windows 8çš„ç³»ç»Ÿä¸‹å»æœç´¢MiProcessLoaderEntryå‡½æ•°
 MiProcessLoaderEntry Get_MiProcessLoaderEntry_WIN_8()
 {
 	CHAR Search_Code[] = "\x48\x89\x5C\x24\x08"			//mov     [rsp+arg_0], rbx
@@ -72,17 +72,17 @@ MiProcessLoaderEntry Get_MiProcessLoaderEntry_WIN_8()
 	return NULL;
 }
 
-//ÔÚWindows 8.1µÄÏµÍ³ÏÂÈ¥ËÑË÷MiProcessLoaderEntryº¯Êı
+//åœ¨Windows 8.1çš„ç³»ç»Ÿä¸‹å»æœç´¢MiProcessLoaderEntryå‡½æ•°
 MiProcessLoaderEntry Get_MiProcessLoaderEntry_WIN_8_1()
 {
 	//IoLoadCrashDumpDriver -> MmLoadSystemImage -> MiProcessLoaderEntry
 	//MmUnloadSystemImage -> MiUnloadSystemImage -> MiProcessLoaderEntry
-	//ÔÚWIN10ÖĞMmUnloadSystemImageÊÇµ¼³öµÄ£¬WIN8.1ÖĞÎ´µ¼³ö£¬ËùÒÔÖ»ÄÜ×ßÁíÒ»ÌõÂ·×Ó£¬»¹ºÃIoLoadCrashDumpDriverÊÇµ¼³öµÄ
+	//åœ¨WIN10ä¸­MmUnloadSystemImageæ˜¯å¯¼å‡ºçš„ï¼ŒWIN8.1ä¸­æœªå¯¼å‡ºï¼Œæ‰€ä»¥åªèƒ½èµ°å¦ä¸€æ¡è·¯å­ï¼Œè¿˜å¥½IoLoadCrashDumpDriveræ˜¯å¯¼å‡ºçš„
 
-	//ÔÚIoLoadCrashDumpDriverº¯ÊıÖĞÓÃÀ´ËÑË÷µÄCode
+	//åœ¨IoLoadCrashDumpDriverå‡½æ•°ä¸­ç”¨æ¥æœç´¢çš„Code
 	CHAR IoLoadCrashDumpDriver_Code[] = "\x48\x8B\xD0"				//mov     rdx, rax
 										"\xE8";						//call	  *******
-	//ÔÚMmLoadSystemImageº¯ÊıÖĞÓÃÀ´ËÑË÷µÄCode
+	//åœ¨MmLoadSystemImageå‡½æ•°ä¸­ç”¨æ¥æœç´¢çš„Code
 	CHAR MmLoadSystemImage_Code[] = "\x41\x8B\xD6"					//mov     edx, r14d	
 									"\x48\x8B\xCE"					//mov	  rcx, rsi
 									"\x41\x83\xCC\x04"				//or	  r12d, 4
@@ -100,7 +100,7 @@ MiProcessLoaderEntry Get_MiProcessLoaderEntry_WIN_8_1()
 	{
 		if (memcmp((VOID*)StartAddress, IoLoadCrashDumpDriver_Code, strlen(IoLoadCrashDumpDriver_Code)) == 0)
 		{
-			StartAddress += strlen(IoLoadCrashDumpDriver_Code);								//Ìø¹ıÒ»Ö±µ½callµÄcode
+			StartAddress += strlen(IoLoadCrashDumpDriver_Code);								//è·³è¿‡ä¸€ç›´åˆ°callçš„code
 			MmLoadSystemImageAddress = *(LONG*)StartAddress + StartAddress + 4;
 			break;
 		}
@@ -115,7 +115,7 @@ MiProcessLoaderEntry Get_MiProcessLoaderEntry_WIN_8_1()
 	{
 		if (memcmp((VOID*)StartAddress, MmLoadSystemImage_Code, strlen(MmLoadSystemImage_Code)) == 0)
 		{
-			StartAddress += strlen(MmLoadSystemImage_Code);								 //Ìø¹ıÒ»Ö±µ½callµÄcode
+			StartAddress += strlen(MmLoadSystemImage_Code);								 //è·³è¿‡ä¸€ç›´åˆ°callçš„code
 			return (MiProcessLoaderEntry)(*(LONG*)StartAddress + StartAddress + 4);
 		}
 		++StartAddress;
@@ -124,18 +124,18 @@ MiProcessLoaderEntry Get_MiProcessLoaderEntry_WIN_8_1()
 	return NULL;
 }
 
-//ÔÚWindows 10µÄÏµÍ³ÏÂÈ¥ËÑË÷MiProcessLoaderEntryº¯Êı
+//åœ¨Windows 10çš„ç³»ç»Ÿä¸‹å»æœç´¢MiProcessLoaderEntryå‡½æ•°
 MiProcessLoaderEntry Get_MiProcessLoaderEntry_WIN_10()
 {
 	//MmUnloadSystemImage -> MiUnloadSystemImage -> MiProcessLoaderEntry
 
-	//ÔÚMmUnloadSystemImageº¯ÊıÖĞËÑË÷µÄCode
+	//åœ¨MmUnloadSystemImageå‡½æ•°ä¸­æœç´¢çš„Code
 	CHAR MmUnloadSystemImage_Code[] = "\x83\xCA\xFF"				//or      edx, 0FFFFFFFFh
 									  "\x48\x8B\xCF"				//mov     rcx, rdi
 									  "\x48\x8B\xD8"				//mov     rbx, rax
 									  "\xE8";						//call    *******
 	/*
-	//ÔÚMiUnloadSystemImageº¯ÊıÖĞËÑË÷µÄCode
+	//åœ¨MiUnloadSystemImageå‡½æ•°ä¸­æœç´¢çš„Code
 	CHAR MiUnloadSystemImage_Code[] = "\x45\x33\xFF"				//xor     r15d, r15d
 									  "\x4C\x39\x3F"				//cmp     [rdi], r15
 									  "\x74\x18"					//jz      short
@@ -156,7 +156,7 @@ MiProcessLoaderEntry Get_MiProcessLoaderEntry_WIN_10()
 	{
 		if (memcmp((VOID*)StartAddress, MmUnloadSystemImage_Code, strlen(MmUnloadSystemImage_Code)) == 0)
 		{
-			StartAddress += strlen(MmUnloadSystemImage_Code);								//Ìø¹ıÒ»Ö±µ½callµÄcode
+			StartAddress += strlen(MmUnloadSystemImage_Code);								//è·³è¿‡ä¸€ç›´åˆ°callçš„code
 			MiUnloadSystemImageAddress = *(LONG*)StartAddress + StartAddress + 4;
 			break;
 		}
@@ -167,21 +167,21 @@ MiProcessLoaderEntry Get_MiProcessLoaderEntry_WIN_10()
 	if (MiUnloadSystemImageAddress == 0)
 		return NULL;
 
-	while (StartAddress < MiUnloadSystemImageAddress + 0x500)
+	while (StartAddress < MiUnloadSystemImageAddress + 0x600)
 	{
-		//·ÖÎöntoskrnl¿ÉÒÔ¿´³öÀ´£¬ÔÚ²»Í¬°æ±¾µÄwin10£¬call MiProcessLoaderEntryÇ°ÃæµÄ²Ù×÷²»Í¬
-		//µ«ÊÇÃ¿´Îcall MiProcessLoaderEntryÖ®ºó¶¼»ámov eax, dword ptr cs:PerfGlobalGroupMask
-		//ËùÒÔÕâÀï¸ù¾İ0xEB(call) , 0x8B 0x05(mov eax)×÷ÎªÌØÕ÷Âë
+		//åˆ†æntoskrnlå¯ä»¥çœ‹å‡ºæ¥ï¼Œåœ¨ä¸åŒç‰ˆæœ¬çš„win10ï¼Œcall MiProcessLoaderEntryå‰é¢çš„æ“ä½œä¸åŒ
+		//ä½†æ˜¯æ¯æ¬¡call MiProcessLoaderEntryä¹‹åéƒ½ä¼šmov eax, dword ptr cs:PerfGlobalGroupMask
+		//æ‰€ä»¥è¿™é‡Œæ ¹æ®0xEB(call) , 0x8B 0x05(mov eax)ä½œä¸ºç‰¹å¾ç 
 
 		/*if (memcmp((VOID*)StartAddress, MiUnloadSystemImage_Code, strlen(MiUnloadSystemImage_Code)) == 0)
 		{
-			StartAddress += strlen(MiUnloadSystemImage_Code);								 //Ìø¹ıÒ»Ö±µ½callµÄcode
+			StartAddress += strlen(MiUnloadSystemImage_Code);								 //è·³è¿‡ä¸€ç›´åˆ°callçš„code
 			return (MiProcessLoaderEntry)(*(LONG*)StartAddress + StartAddress + 4);
 		}*/
 		if (*(UCHAR*)StartAddress == 0xE8 &&												//call
 			*(UCHAR *)(StartAddress + 5) == 0x8B && *(UCHAR *)(StartAddress + 6) == 0x05)	//mov eax,
 		{
-			StartAddress++;																	//Ìø¹ıcallµÄ0xE8
+			StartAddress++;																	//è·³è¿‡callçš„0xE8
 			return (MiProcessLoaderEntry)(*(LONG*)StartAddress + StartAddress + 4);
 		}
 		++StartAddress;
@@ -190,7 +190,7 @@ MiProcessLoaderEntry Get_MiProcessLoaderEntry_WIN_10()
 	return NULL;
 }
 
-//¸ù¾İÏµÍ³ÅĞ¶Ïµ÷ÓÃÄÄ¸öº¯Êı
+//æ ¹æ®ç³»ç»Ÿåˆ¤æ–­è°ƒç”¨å“ªä¸ªå‡½æ•°
 MiProcessLoaderEntry Get_MiProcessLoaderEntry()
 {
 	MiProcessLoaderEntry m_MiProcessLoaderEntry = NULL;
@@ -201,56 +201,56 @@ MiProcessLoaderEntry Get_MiProcessLoaderEntry()
 	Status = RtlGetVersion(&OsVersion);
 	if (!NT_SUCCESS(Status))
 	{
-		KdPrint(("»ñÈ¡ÏµÍ³°æ±¾Ê§°Ü£¡\n"));
+		KdPrint(("è·å–ç³»ç»Ÿç‰ˆæœ¬å¤±è´¥ï¼\n"));
 		return NULL;
 	}
 
-	if (OsVersion.dwMajorVersion == 10)								//Èç¹ûÊÇWindows 10
+	if (OsVersion.dwMajorVersion == 10)								//å¦‚æœæ˜¯Windows 10
 	{
 		m_MiProcessLoaderEntry = Get_MiProcessLoaderEntry_WIN_10();
-		KdPrint(("µ±Ç°ÏµÍ³°æ±¾ÊÇWindows 10 %d\n", OsVersion.dwBuildNumber));
+		KdPrint(("å½“å‰ç³»ç»Ÿç‰ˆæœ¬æ˜¯Windows 10 %d\n", OsVersion.dwBuildNumber));
 		if (m_MiProcessLoaderEntry == NULL)
-			KdPrint(("»ñÈ¡²»µ½MiProcessLoaderEntry£¡\n"));
+			KdPrint(("è·å–ä¸åˆ°MiProcessLoaderEntryï¼\n"));
 		else
-			KdPrint(("MiProcessLoaderEntryµØÖ·ÊÇ£º%llx\n", (ULONG_PTR)m_MiProcessLoaderEntry));
+			KdPrint(("MiProcessLoaderEntryåœ°å€æ˜¯ï¼š%llx\n", (ULONG_PTR)m_MiProcessLoaderEntry));
 
 		return m_MiProcessLoaderEntry;
 	}
 	else if (OsVersion.dwMajorVersion == 6 && OsVersion.dwMinorVersion == 3)
 	{
 		m_MiProcessLoaderEntry = Get_MiProcessLoaderEntry_WIN_8_1();
-		KdPrint(("µ±Ç°ÏµÍ³°æ±¾ÊÇWindows 8.1\n"));
+		KdPrint(("å½“å‰ç³»ç»Ÿç‰ˆæœ¬æ˜¯Windows 8.1\n"));
 		if (m_MiProcessLoaderEntry == NULL)
-			KdPrint(("»ñÈ¡²»µ½MiProcessLoaderEntry£¡\n"));
+			KdPrint(("è·å–ä¸åˆ°MiProcessLoaderEntryï¼\n"));
 		else
-			KdPrint(("MiProcessLoaderEntryµØÖ·ÊÇ£º%llx\n", (ULONG_PTR)m_MiProcessLoaderEntry));
+			KdPrint(("MiProcessLoaderEntryåœ°å€æ˜¯ï¼š%llx\n", (ULONG_PTR)m_MiProcessLoaderEntry));
 
 		return m_MiProcessLoaderEntry;
 	}
-	else if (OsVersion.dwMajorVersion == 6 && OsVersion.dwMinorVersion == 2 && OsVersion.wProductType == VER_NT_WORKSTATION)		//Õâ¸öÊÇÎªÁËÇø·ÖWindows 8ºÍWindows Server 2012
+	else if (OsVersion.dwMajorVersion == 6 && OsVersion.dwMinorVersion == 2 && OsVersion.wProductType == VER_NT_WORKSTATION)		//è¿™ä¸ªæ˜¯ä¸ºäº†åŒºåˆ†Windows 8å’ŒWindows Server 2012
 	{
 		m_MiProcessLoaderEntry = Get_MiProcessLoaderEntry_WIN_8();
-		KdPrint(("µ±Ç°ÏµÍ³°æ±¾ÊÇWindows 8\n"));
+		KdPrint(("å½“å‰ç³»ç»Ÿç‰ˆæœ¬æ˜¯Windows 8\n"));
 		if (m_MiProcessLoaderEntry == NULL)
-			KdPrint(("»ñÈ¡²»µ½MiProcessLoaderEntry£¡\n"));
+			KdPrint(("è·å–ä¸åˆ°MiProcessLoaderEntryï¼\n"));
 		else
-			KdPrint(("MiProcessLoaderEntryµØÖ·ÊÇ£º%llx\n", (ULONG_PTR)m_MiProcessLoaderEntry));
+			KdPrint(("MiProcessLoaderEntryåœ°å€æ˜¯ï¼š%llx\n", (ULONG_PTR)m_MiProcessLoaderEntry));
 
 		return m_MiProcessLoaderEntry;
 	}
-	else if (OsVersion.dwMajorVersion == 6 && OsVersion.dwMinorVersion == 1 && OsVersion.wProductType == VER_NT_WORKSTATION)		//Õâ¸öÊÇÎªÁËÇø·ÖWindows 7ºÍWindows Server 2008 R2	
+	else if (OsVersion.dwMajorVersion == 6 && OsVersion.dwMinorVersion == 1 && OsVersion.wProductType == VER_NT_WORKSTATION)		//è¿™ä¸ªæ˜¯ä¸ºäº†åŒºåˆ†Windows 7å’ŒWindows Server 2008 R2	
 	{
 		m_MiProcessLoaderEntry = Get_MiProcessLoaderEntry_WIN_7();
-		KdPrint(("µ±Ç°ÏµÍ³°æ±¾ÊÇWindows 7\n"));
+		KdPrint(("å½“å‰ç³»ç»Ÿç‰ˆæœ¬æ˜¯Windows 7\n"));
 		if (m_MiProcessLoaderEntry == NULL)
-			KdPrint(("»ñÈ¡²»µ½MiProcessLoaderEntry£¡\n"));
+			KdPrint(("è·å–ä¸åˆ°MiProcessLoaderEntryï¼\n"));
 		else
-			KdPrint(("MiProcessLoaderEntryµØÖ·ÊÇ£º%llx\n", (ULONG_PTR)m_MiProcessLoaderEntry));
+			KdPrint(("MiProcessLoaderEntryåœ°å€æ˜¯ï¼š%llx\n", (ULONG_PTR)m_MiProcessLoaderEntry));
 
 		return m_MiProcessLoaderEntry;
 	}
 
-	KdPrint(("µ±Ç°ÏµÍ³²»Ö§³Ö£¡\n"));
+	KdPrint(("å½“å‰ç³»ç»Ÿä¸æ”¯æŒï¼\n"));
 	return NULL;
 }
 
